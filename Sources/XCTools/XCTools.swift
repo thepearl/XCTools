@@ -23,14 +23,44 @@ struct RemoveDD: ParsableCommand {
     var clean: Bool = false
 
     func run() throws {
+        let fileManager = FileManager.default
         let derivedDataPath = path ?? "~/Library/Developer/Xcode/DerivedData"
-        print("Removing derived data from: \(derivedDataPath)")
+        let expandedPath = NSString(string: derivedDataPath).expandingTildeInPath
 
-        // Add code to remove derived data here
+        print("Removing derived data from: \(expandedPath)")
+
+        do {
+            if fileManager.fileExists(atPath: expandedPath) {
+                try fileManager.removeItem(atPath: expandedPath)
+                print("Successfully removed derived data.")
+            } else {
+                print("Derived data folder does not exist at the specified path.")
+            }
+        } catch {
+            print("Error removing derived data: \(error.localizedDescription)")
+        }
 
         if clean {
+#if os(macOS)
             print("Cleaning the project...")
-            // Add code to run xcodebuild -alltargets clean
+            let task = Process()
+            task.executableURL = URL(fileURLWithPath: "/usr/bin/xcodebuild")
+            task.arguments = ["-alltargets", "clean"]
+
+            do {
+                try task.run()
+                task.waitUntilExit()
+                if task.terminationStatus == 0 {
+                    print("Project cleaned successfully.")
+                } else {
+                    print("Error cleaning the project. Exit code: \(task.terminationStatus)")
+                }
+            } catch {
+                print("Error running xcodebuild clean: \(error.localizedDescription)")
+            }
+#else
+            fatalError("Cleaning the project is not supported on this platform.")
+#endif
         }
     }
 }
@@ -46,7 +76,30 @@ struct Fresh: ParsableCommand {
 
     func run() throws {
         print("Running: bundle exec install && bundle exec pod install")
-        // Add code to run the above command
+#if os(macOS)
+            print("Cleaning the project...")
+            let bundleInstallTask = Process()
+        bundleInstallTask.executableURL = URL(fileURLWithPath: "/usr/bin/bundle")
+        bundleInstallTask.arguments = ["install"]
+
+        let podInstallTask = Process()
+        podInstallTask.executableURL = URL(fileURLWithPath: "/usr/bin/bundle")
+        podInstallTask.arguments = ["exec", "pod", "install"]
+
+            do {
+                try bundleInstallTask.run()
+                bundleInstallTask.waitUntilExit()
+                if bundleInstallTask.terminationStatus == 0 {
+                    print("Project cleaned successfully.")
+                } else {
+                    print("Error cleaning the project. Exit code: \(bundleInstallTask.terminationStatus)")
+                }
+            } catch {
+                print("Error running xcodebuild clean: \(error.localizedDescription)")
+            }
+#else
+            fatalError("Install pods and reset packages cache is not supported on this platform.")
+#endif
 
         if spm {
             print("Resolving package dependencies...")
