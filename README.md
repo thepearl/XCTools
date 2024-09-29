@@ -16,7 +16,18 @@ XCTools is a command-line utility designed to streamline common Xcode-related ta
 - Xcode 13.0 or later
 - Swift 5.10 or later
 
+### Using Homebrew
+
+You can easily install XCTools using Homebrew:
+
+```bash
+brew tap thepearl/tools
+brew install xctools
+```
+
 ### From Source
+
+If you prefer to install from source:
 
 1. Clone the repository:
    ```bash
@@ -104,7 +115,7 @@ We welcome contributions to XCTools! If you have a feature request, bug report, 
 
 ## License
 
-XCTools is released under the MIT License. See the [LICENSE](LICENSE) file for details.
+XCTools is released under the GNU General Public License v3.0 (GPL-3.0). See the [LICENSE](LICENSE) file for details.
 
 ## Support
 
