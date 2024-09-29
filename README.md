@@ -20,7 +20,7 @@ XCTools is a command-line utility designed to streamline common Xcode-related ta
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/XCTools.git
+   git clone https://github.com/thepearl/XCTools.git
    ```
 
 2. Navigate to the project directory:
