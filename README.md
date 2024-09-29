@@ -21,7 +21,7 @@ XCTools is a command-line utility designed to streamline common Xcode-related ta
 You can easily install XCTools using Homebrew:
 
 ```bash
-brew tap thepearl/tools
+brew tap thepearl/xctools
 brew install xctools
 ```
 
